@@ -1,9 +1,9 @@
 public class Solution
 {
-    public IList<int> RightSideView(TreeNode root)
+    public IList<int> LargestValues(TreeNode root)
     {
         List<int> res = new List<int>();
-        DFS(root, 1, res);
+        DFS(root, 0, res);
         return res;
     }
 
@@ -11,8 +11,11 @@ public class Solution
     {
         if (root == null)
             return;
-        if (level > res.Count) res.Add(root.val);
-        DFS(root.right, level + 1, res);
+        if (res.Count == level)
+            res.Add(root.val);
+        else
+            res[level] = Math.Max(res[level], root.val);
         DFS(root.left, level + 1, res);
+        DFS(root.right, level + 1, res);
     }
 }

@@ -1,36 +1,38 @@
+using System;
+using System.Collections.Generic;
+
 public class Solution
 {
     public int[] FindOrder(int numCourses, int[][] prerequisites)
     {
-        IList<List<int>> graph = new List<List<int>>();
-        int[] visited = new int[numCourses];
-        List<int> result = new List<int>();
+        List<int>[] graph = new List<int>[numCourses];
         for (int i = 0; i < numCourses; i++)
-            graph.Add(new List<int>());
-        foreach (var p in prerequisites)
-            graph[p[0]].Add(p[1]);
+            graph[i] = new List<int>();
+        foreach (var item in prerequisites)
+            graph[item[1]].Add(item[0]);
+        int[] visited = new int[numCourses];
+        Stack<int> path = new Stack<int>();
         for (int i = 0; i < numCourses; i++)
         {
-            if (DFS(graph, visited, i, result))
+            if (!DFS(graph, visited, i, path))
                 return new int[0];
         }
-        return result.ToArray();
+        return path.ToArray();
     }
 
-    private bool DFS(IList<List<int>> graph, int[] visited, int index, List<int> result)
+    private bool DFS(List<int>[] graph, int[] visited, int i, Stack<int> path)
     {
-        if (visited[index] == 1)
-            return true;
-        if (visited[index] == 2)
-            return false;
-        visited[index] = 1;
-        foreach (var item in graph[index])
+        if (visited[i] == 1) return false;
+        if (visited[i] == 2) return true;
+        visited[i] = 1;
+
+        foreach (var item in graph[i])
         {
-            if (DFS(graph, visited, item, result))
+            if (!DFS(graph, visited, item, path))
                 return false;
         }
-        visited[index] = 2;
-        result.Add(index);
-        return false;
+        visited[i] = 2;
+        path.Push(i);
+        return true;
     }
 }

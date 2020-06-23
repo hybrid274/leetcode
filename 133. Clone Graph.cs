@@ -1,17 +1,21 @@
 public class Solution
 {
-    Dictionary<Node, Node> map = new Dictionary<Node, Node>();
     public Node CloneGraph(Node node)
+    {
+        var m = new Dictionary<Node, Node>();
+        return DFS(node, m);
+    }
+
+    private Node DFS(Node node, Dictionary<Node, Node> m)
     {
         if (node == null)
             return null;
-
-        if (!map.ContainsKey(node))
-        {
-            map[node] = new Node(node.val, new List<Node>());
-            foreach (var neighbor in node.neighbors)
-                map[node].neighbors.Add(CloneGraph(neighbor));
-        }
-        return map[node];
+        if (m.ContainsKey(node))
+            return m[node];
+        Node clone = new Node(node.val);
+        m[node] = clone;
+        foreach (var n in node.neighbors)
+            clone.neighbors.Add(DFS(n, m));
+        return clone;
     }
 }

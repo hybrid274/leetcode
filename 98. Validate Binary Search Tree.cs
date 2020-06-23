@@ -1,14 +1,28 @@
 public class Solution
 {
-    public bool IsValidBST(TreeNode root)
+    public IList<IList<int>> FindSubsequences(int[] nums)
     {
-        return DFS(root, long.MinValue, long.MaxValue);
+        var result = new List<IList<int>>();
+        DFS(nums, 0, new List<int>(), result);
+        return result;
     }
 
-    private bool DFS(TreeNode root, long minValue, long maxValue)
+    private void DFS(int[] nums, int startIndex, List<int> oneResult, List<IList<int>> result)
     {
-        if (root == null) return true;
-        if (root.val <= minValue || root.val >= maxValue) return false;
-        return DFS(root.left, minValue, root.val) && DFS(root.right, root.val, maxValue);
+        if (oneResult.Count > 1)
+            result.Add(new List<int>(oneResult));
+        HashSet<int> isVitied = new HashSet<int>();
+
+        for (int i = startIndex; i < nums.Length; i++)
+        {
+            int cur = nums[i];
+            if (isVitied.Contains(cur))
+                continue;
+
+            isVitied.Add(cur);
+            oneResult.Add(cur);
+            DFS(nums, i + 1, oneResult, result);
+            oneResult.RemoveAt(oneResult.Count - 1);
+        }
     }
 }

@@ -4,7 +4,6 @@ public class Solution
     {
         if (root == null)
             return null;
-
         Node p = root.next;
         while (p != null)
         {

@@ -4,7 +4,6 @@
     {
         if (root == null)
             return null;
-
         if (root.left != null)
             root.left.next = root.right;
         if (root.right != null)
